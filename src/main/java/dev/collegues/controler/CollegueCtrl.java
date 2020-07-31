@@ -1,11 +1,13 @@
 package dev.collegues.controler;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +17,6 @@ import dev.collegues.entite.Collegue;
 import dev.collegues.service.CollegueService;
 
 @RestController
-//@RequestMapping("collegues")
 public class CollegueCtrl {
 	
 	@Autowired
@@ -28,15 +29,24 @@ public class CollegueCtrl {
 	
 	@RequestMapping(path = "collegues", method = RequestMethod.GET)
 	public ResponseEntity<?> findCollegueByNom(@RequestParam("nom") String nom){
+		
 		if(nom.length() <= 0) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("erreur de paramètres");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Veuillez entrer un nom");
 		}
 		
-		Optional<Collegue> opt = collegueService.findByName(nom);
-		if(opt.isEmpty()) {
+		List<Collegue> collegues = collegueService.findAll();
+		Collegue collegue = null;
+		for(Collegue col : collegues) {
+			if(col.getNom().contentEquals(nom)) {
+				collegue = col;
+			}
+		}
+		if(collegue == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de Collegue à ce nom");
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(opt);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(collegue);
 	}
+	
 
 }

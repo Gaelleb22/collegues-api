@@ -22,17 +22,4 @@ public class CollegueService {
 		return collegueRepository.findAll();
 	}
 
-	public Optional<Collegue> findByName(String name){
-		List<Collegue> collegues = collegueRepository.findAll();
-		
-		Optional<Collegue> opt = null;
-		for(Collegue col : collegues) {
-			if(col.getNom().contentEquals(name)) {
-				opt.equals(col);
-			}
-		}
-		
-		return opt;
-	}
-
 }
