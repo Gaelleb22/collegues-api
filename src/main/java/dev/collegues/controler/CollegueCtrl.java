@@ -1,5 +1,6 @@
 package dev.collegues.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,17 +36,17 @@ public class CollegueCtrl {
 		}
 		
 		List<Collegue> collegues = collegueService.findAll();
-		Collegue collegue = null;
+		List<Collegue> trouve = new ArrayList<>();
 		for(Collegue col : collegues) {
 			if(col.getNom().contentEquals(nom)) {
-				collegue = col;
+				trouve.add(col);
 			}
 		}
-		if(collegue == null) {
+		if(trouve.size() == 0) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de Collegue à ce nom");
 		}
 		
-		return ResponseEntity.status(HttpStatus.OK).body(collegue);
+		return ResponseEntity.status(HttpStatus.OK).body(trouve);
 	}
 	
 
