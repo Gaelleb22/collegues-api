@@ -50,7 +50,7 @@ public class Collegue {
 	 * 
 	 */
 	@Column(name = "date_naissance")
-	private LocalDate dataDeNaissance;
+	private LocalDate dateDeNaissance;
 	/**lien url de la photo
 	 * 
 	 */
@@ -136,15 +136,15 @@ public class Collegue {
 	/**
 	 * @return the dataDeNaissance
 	 */
-	public LocalDate getDataDeNaissance() {
-		return dataDeNaissance;
+	public LocalDate getDateDeNaissance() {
+		return dateDeNaissance;
 	}
 
 	/**
 	 * @param dataDeNaissance the dataDeNaissance to set
 	 */
-	public void setDataDeNaissance(LocalDate dataDeNaissance) {
-		this.dataDeNaissance = dataDeNaissance;
+	public void setDateDeNaissance(LocalDate dateDeNaissance) {
+		this.dateDeNaissance = dateDeNaissance;
 	}
 
 	/**
