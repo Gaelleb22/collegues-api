@@ -51,5 +51,21 @@ public class CollegueCtrl {
 		return ResponseEntity.status(HttpStatus.OK).body(trouve);
 	}
 	
+	@GetMapping(path="/{matricule}")
+	public ResponseEntity<?> findCollegueByMatricule (@PathVariable String matricule){
+		List<Collegue> collegues = collegueService.findAll();
+		List<Collegue> trouve = new ArrayList<>();
+		for(Collegue col : collegues) {
+			if(col.getMatricule().contentEquals(matricule)) {
+				trouve.add(col);
+			}
+		}
+		if(trouve.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de Collegue avec ce matricule");
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(trouve);
+	}
+	
 
 }
