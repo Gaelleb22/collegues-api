@@ -3,6 +3,7 @@ package dev.collegues.controler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,18 +52,23 @@ public class CollegueCtrl {
 		return ResponseEntity.status(HttpStatus.OK).body(trouve);
 	}
 	
-	@GetMapping(path="/{matricule}")
-	public ResponseEntity<?> findCollegueByMatricule (@PathVariable String matricule){
-		List<Collegue> collegues = collegueService.findAll();
-		List<Collegue> trouve = new ArrayList<>();
-		for(Collegue col : collegues) {
-			if(col.getMatricule().contentEquals(matricule)) {
-				trouve.add(col);
-			}
+	@GetMapping(path="collegues/{uuidString}")
+	public ResponseEntity<?> findCollegueByMatricule (@PathVariable String uuidString){
+		
+		UUID matricule = null;
+		try{
+			matricule = UUID.fromString(uuidString);
+		} catch(IllegalArgumentException e) {
+			new IllegalArgumentException (e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Uuid invalide");
 		}
-		if(trouve.size() == 0) {
+		
+		Optional<Collegue> opt = collegueService.findByUuid(matricule);
+		List<Collegue> trouve = new ArrayList<>();
+		if(opt.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de Collegue avec ce matricule");
 		}
+		trouve.add(opt.get());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(trouve);
 	}

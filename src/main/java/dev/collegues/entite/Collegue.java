@@ -4,6 +4,7 @@
 package dev.collegues.entite;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,13 +25,7 @@ public class Collegue {
 	 * 
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	/**matricule du collègue
-	 * 
-	 */
-	@Column(name = "matricule")
-	private String matricule;
+    private UUID matricule;
 	/**nom
 	 * 
 	 */
@@ -61,33 +56,20 @@ public class Collegue {
 	 * 
 	 */
 	public Collegue() {
-	}
-
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
+		 this.matricule = UUID.randomUUID();
 	}
 
 	/**
 	 * @return the matricule
 	 */
-	public String getMatricule() {
+	public UUID getMatricule() {
 		return matricule;
 	}
 
 	/**
 	 * @param matricule the matricule to set
 	 */
-	public void setMatricule(String matricule) {
+	public void setMatricule(UUID matricule) {
 		this.matricule = matricule;
 	}
 

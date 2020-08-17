@@ -2,6 +2,7 @@ package dev.collegues.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,10 @@ public class CollegueService {
 
 	public List<Collegue> findAll(){
 		return collegueRepository.findAll();
+	}
+	
+	public Optional<Collegue> findByUuid(UUID uuid){
+		return collegueRepository.findById(uuid);
 	}
 
 }
