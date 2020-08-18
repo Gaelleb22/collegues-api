@@ -1,7 +1,9 @@
 package dev.collegues.controler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.collegues.dto.CollegueDto;
 import dev.collegues.dto.CreerCollegueDto;
 import dev.collegues.entite.Collegue;
+import dev.collegues.entite.Photo;
 import dev.collegues.service.CollegueService;
 
 @CrossOrigin(origins = "*")
@@ -77,6 +80,18 @@ public class CollegueCtrl {
 		trouve.add(opt.get());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(trouve);
+	}
+	
+	@GetMapping(path="collegues/photos")
+	public ResponseEntity<?> findPhotos(){
+		List<Collegue> collegues = collegueService.findAll();
+		List<Photo> photos = new ArrayList<>();
+		for(Collegue col : collegues) {
+			Photo photo = new Photo(col.getMatricule(), col.getPhotoUrl());
+			photos.add(photo);
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(photos);
 	}
 	
 	@PostMapping
