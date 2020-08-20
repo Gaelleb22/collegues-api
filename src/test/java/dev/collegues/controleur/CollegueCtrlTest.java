@@ -2,6 +2,7 @@ package dev.collegues.controleur;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +41,14 @@ public class CollegueCtrlTest {
 		collegues.add(collegue1);
 		
 		Mockito.when(collegueService.findAll()).thenReturn(collegues);
+		
+		Optional<Collegue> col = Optional.of(collegues.get(0));
+		Mockito.when(collegueService.findByUuid(UUID.fromString("747c41b7-f164-43f7-86ad-6a42f47c6120"))).thenReturn(col);
+		
 	}
 	
 	@Test
-	void findCollegueByNomTest() throws Exception{
+	void findCollegueByNomCorrectTest() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/collegues?nom=Lourson"))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.jsonPath("$[0].nom").isNotEmpty())
@@ -53,17 +58,43 @@ public class CollegueCtrlTest {
 	}
 	
 	@Test
-	void findCollegueByNomOublieTest() throws Exception{
+	void findCollegueByNomInvalidTest() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/collegues?nom="))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest())
 		.andExpect(MockMvcResultMatchers.content().string("Veuillez entrer un nom"));
 	}
 	
 	@Test
-	void findCollegueByNomIncorrectTest() throws Exception{
+	void findCollegueByNomNotFoundTest() throws Exception{
 		mockMvc.perform(MockMvcRequestBuilders.get("/collegues?nom=Autre"))
 		.andExpect(MockMvcResultMatchers.status().isNotFound())
 		.andExpect(MockMvcResultMatchers.content().string("Pas de Collegue à ce nom"));
+	}
+	
+	
+	//Tests findCollegueByMatricule
+	@Test
+	void findCollegueByMatriculeCorrectTest() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/collegues/747c41b7-f164-43f7-86ad-6a42f47c6120"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.jsonPath("$[0].nom").isNotEmpty())
+		.andExpect(MockMvcResultMatchers.jsonPath("$[0].nom").value("Lourson"))
+		.andExpect(MockMvcResultMatchers.jsonPath("$[0].prenoms").isNotEmpty())
+		.andExpect(MockMvcResultMatchers.jsonPath("$[0].prenoms").value("Winnie"));
+	}
+	
+	@Test
+	void findCollegueByMatriculeInvalidTest() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/collegues/747c41b7f164-43f786ad6a42f47c6120"))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest())
+		.andExpect(MockMvcResultMatchers.content().string("Uuid invalide"));
+	}
+	
+	@Test
+	void findCollegueByMatriculeNotFoundTest() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/collegues/747c41b7-f164-43f7-86ad-6a42f47c61"))
+		.andExpect(MockMvcResultMatchers.status().isNotFound())
+		.andExpect(MockMvcResultMatchers.content().string("Pas de Collegue avec ce matricule"));
 	}
 
 }
