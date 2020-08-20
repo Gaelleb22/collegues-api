@@ -35,11 +35,6 @@ public class CollegueCtrl {
 	@Autowired
 	private CollegueService collegueService;
 	
-	@RequestMapping(path = "listecollegues", method = RequestMethod.GET)
-	public ResponseEntity<?> findAll(){
-		return ResponseEntity.status(HttpStatus.OK).body(collegueService.findAll());
-	}
-	
 	@RequestMapping(path = "collegues", method = RequestMethod.GET)
 	public ResponseEntity<?> findCollegueByNom(@RequestParam("nom") String nom){
 		
