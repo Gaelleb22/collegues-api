@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import dev.collegues.entite.Collegue;
@@ -42,6 +44,18 @@ public class CollegueService {
 		Collegue collegueSauvegarde = this.collegueRepository.save(collegue);
 		
 		return collegueSauvegarde;
+	}
+	
+	@Transactional
+	public ResponseEntity<?> delete(UUID uuid) {
+		Optional<Collegue> opt = collegueRepository.findById(uuid);
+		if(opt.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de Collegue avec ce matricule");
+		}
+		else {
+			collegueRepository.delete(opt.get());
+			return ResponseEntity.status(HttpStatus.OK).body(opt.get().getPrenoms()+" "+opt.get().getNom()+"a bien été supprimé");
+		}
 	}
 
 }
